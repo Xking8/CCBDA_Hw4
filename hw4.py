@@ -1,12 +1,16 @@
 #!/usr/bin/python
-sup = 0.01
-confidence = 0.6
+import sys
+filenm = sys.argv[1]
+sup = 0.3
+confidence = 0.3
+
 C1 = {}
+#print sys.argv[1], sys.argv[2]
 
-f = open("T40I10D100K.dat")
+f = open(filenm)
 text = f.read().split()
-
-num_lines = sum(1 for line in open('T40I10D100K.dat'))
+f.close()
+num_lines = sum(1 for line in open(filenm))
 sup_count = num_lines * sup
 print "sup count:",sup_count
 
@@ -22,3 +26,8 @@ for (item,count) in C1.items():
 print "after del"
 for (item,count) in C1.items():
 	print item,count
+
+f = open(filenm)
+
+
+
