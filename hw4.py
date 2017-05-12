@@ -1,8 +1,8 @@
 #!/usr/bin/python
 import sys
 filenm = sys.argv[1]
-sup = 0.3
-confidence = 0.3
+sup =float(sys.argv[2])
+confidence =float (sys.argv[3])
 rule = 0
 Tx = {}
 C1 = {}
@@ -36,7 +36,8 @@ for (item,count) in C1.items():
         L1.update({indL1:item})
         indL1 = indL1+1
 
-print "L1: ",L1,"indL1:",indL1
+#print "L1: ",L1
+print "num of L1:",indL1
 
 C2t = {}
 #start C2 L2
@@ -48,7 +49,7 @@ for i in xrange(indL1-1):
         C2t.update( { (L1[i],L1[j]):0 } )
         indC2 += 1
         #print L1[i], L1[j]
-print "h2" 
+print "C2=",C2 
 for (C2d,[p1,p2,count]) in C2.items():
     for Tranc,Tlist in Tx.items():
         #print "Tlist:",Tlist
@@ -62,8 +63,9 @@ for (C2d,[p1,p2,count]) in C2.items():
         if p1ck and p2ck:
             C2[C2d][2] += 1
             C2t[(p1,p2)] += 1
-print "C2t", C2t
-print "C2:+++",C2           
+    print C2d,"'s count:",C2[C2d][2]
+#print "C2t", C2t
+#print "C2:+++",C2           
 C3List = []
 for (C2d,[p1,p2,count]) in C2.items():
     if count < sup_count:
@@ -74,8 +76,9 @@ for (C2d,[p1,p2,count]) in C2.items():
         if p2 not in C3List:
             C3List.append(p2)
         
-print "L2:***",C2
-print "C3List",C3List,len(C3List)
+#print "L2:***",C2
+#print "C3List",C3List,len(C3List)
+print "num of L2:",len(C3List)
 
 #start C3 L3
 indC3 = 0
@@ -104,7 +107,7 @@ for (C3d,[p1,p2,p3,count]) in C3.items():
     #print "_____________________________"
         
 
-print "C3$$$$",C3
+#print "C3$$$$",C3
 for (C3d,[p1,p2,p3,count]) in C3.items():
     if count < sup_count:
         del C3[C3d]
@@ -113,18 +116,18 @@ print "L3:",C3
 #finding rules:L2, L3
 for (C2d,[p1,p2,count]) in C2.items():
     M = [p1,p2]
-    print "M:",M
+    #print "M:",M
     for P in M:
         Q = list(M)
         Q.remove(P)
-        print "P:",P
-        print "Q:",Q
-        print Q,"count: ",C1[Q[0]], count
+        #print "P:",P
+        #print "Q:",Q
+        #print Q,"count: ",C1[Q[0]], count
         conf = float(count) / C1[ Q[0] ]
         if conf > confidence:
             print Q[0],"->",P," ",conf
             rule += 1
-    print "------"
+    #print "------"
 print rule
 
 print "finding rule: L3"
@@ -133,7 +136,7 @@ for (C3d,[p1,p2,p3,count]) in C3.items():
     for P in M:     #pick 1 element in P
         Q = list(M)
         Q.remove(P)
-        print Q,":",C2t[(Q[0],Q[1])]
+        #print Q,":",C2t[(Q[0],Q[1])]
         numQ = C2t[(Q[0],Q[1])]
         conf = float(count) / numQ
         if conf > confidence:
